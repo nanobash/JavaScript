@@ -6,16 +6,17 @@
  * Function takes provided function with with n argument and convert
  *      it into a single argument.
  *
- * @param {Function} fn
- *
  * @example
- *      console.log(['1', '2', '3'].map(unaryArrow(parseInt)));
+ *      console.log(['1', '2', '3'].map(unary(parseInt)));
+ *
+ * @param {Function}    fn
+ * @param {Object}      [context = null]
  *
  * @return {Function}
  */
-const unary = function (fn) {
+const unary = function (fn, context = null) {
     return 1 === fn.length ? fn : function (arg) {
-        return fn.call(this, arg);
+        return fn.call(context, arg);
     };
 };
 
@@ -25,9 +26,12 @@ const unary = function (fn) {
  * @example
  *      console.log(['1', '2', '3'].map(unaryArrow(parseInt)));
  *
- * @param {Function} fn
+ * @param {Function}    fn
+ * @param {Object}      [context = null]
+ *
+ * @return {Function}
  */
-const unaryArrow = (fn) => 1 === fn.length ? fn : (arg) => fn.call(this, arg);
+const unaryArrow = (fn, context = null) => 1 === fn.length ? fn : (arg) => fn.call(context, arg);
 
 /**
  * Executes provided function only once.
@@ -38,14 +42,15 @@ const unaryArrow = (fn) => 1 === fn.length ? fn : (arg) => fn.call(this, arg);
  *      }); fn(); fn();
  *
  * @param {Function} fn
+ * @param {Object}   [context = null]
  *
  * @return {Function}
  */
-const once = function (fn) {
+const once = function (fn, context = null) {
     let done = false;
 
     return function () {
-        return true === done ? undefined : (done = true, fn.apply(this, arguments));
+        return true === done ? undefined : (done = true, fn.apply(context, arguments));
     };
 };
 
@@ -53,18 +58,19 @@ const once = function (fn) {
  * Arrow style function, prototyping above defined "once" function.
  *
  * @example
- *      let fn = once(() => {
+ *      let fn = onceArrow(() => {
  *          console.log('Executes only once!');
  *      }); fn(); fn();
  *
- * @param {Function} fn
+ * @param {Function}    fn
+ * @param {Object}      [context = null]
  *
  * @return {Function|undefined}
  */
-const onceArrow = (fn) => {
+const onceArrow = (fn, context = null) => {
     let done = false;
 
-    return () => true === done ? undefined : (done = true, fn.apply(this, arguments));
+    return () => true === done ? undefined : (done = true, fn.apply(context, arguments));
 };
 
 /**
@@ -78,14 +84,15 @@ const onceArrow = (fn) => {
  *
  * @param {Array}       items
  * @param {Function}    fn
+ * @param {Object}      [context = null]
  *
  * @return {Boolean}
  */
-const every = function (items, fn) {
+const every = function (items, fn, context = null) {
     let result = true;
 
     for (const item of items) {
-        result = result && fn.call(this, item);
+        result = result && fn.call(context, item);
     }
 
     return result;
@@ -101,14 +108,15 @@ const every = function (items, fn) {
  *
  * @param {Array}       items
  * @param {Function}    fn
+ * @param {Object}      [context = null]
  *
  * @return {Boolean}
  */
-const everyArrow = (items, fn) => {
+const everyArrow = (items, fn, context = null) => {
     let result = true;
 
     for (const item of items) {
-        result = result && fn.call(this, item);
+        result = result && fn.call(context, item);
     }
 
     return result;
@@ -125,14 +133,15 @@ const everyArrow = (items, fn) => {
  *
  * @param {Array}       items
  * @param {Function}    fn
+ * @param {Object}      [context = null]
  *
  * @return {Boolean}
  */
-const any = function (items, fn) {
+const any = function (items, fn, context = null) {
     let result = false;
 
     for (const item of items) {
-        result = result || fn.call(this, item);
+        result = result || fn.call(context, item);
     }
 
     return result;
@@ -148,14 +157,15 @@ const any = function (items, fn) {
  *
  * @param {Array}       items
  * @param {Function}    fn
+ * @param {Object}      [context = null]
  *
  * @return {Boolean}
  */
-const anyArrow = (items, fn) => {
+const anyArrow = (items, fn, context = null) => {
     let result = false;
 
     for (const item of items) {
-        result = result || fn.call(this, item);
+        result = result || fn.call(context, item);
     }
 
     return result;
@@ -170,11 +180,12 @@ const anyArrow = (items, fn) => {
  *          return arg * 2;
  *      }); memory(10); memory(20); memory(30); console.log(memory(10, true));
  *
- * @param {Function} fn
+ * @param {Function}    fn
+ * @param {Object}      [context = null]
  *
  * @return {Function}
  */
-const memorized = function (fn) {
+const memorized = function (fn, context = null) {
     const cached = {};
 
     /**
@@ -183,14 +194,15 @@ const memorized = function (fn) {
      *      cached data is returned, otherwise result.
      *
      * @param {Number}  arg
+     * @param {Object}  [contextInner = null]
      * @param {Boolean} [show = false]
      */
-    return function (arg, show = false) {
+    return function (arg, contextInner = null, show = false) {
         if (show) {
             return cached;
         }
 
-        return cached[arg] || (cached[arg] = fn.call(this, arg));
+        return cached[arg] || (cached[arg] = fn.call(null !== contextInner ? contextInner : context, arg));
     };
 };
 
@@ -202,11 +214,12 @@ const memorized = function (fn) {
  *          return arg * 2;
  *      }); memory(10); memory(20); memory(30); console.log(memory(10, true));
  *
- * @param {Function} fn
+ * @param {Function}    fn
+ * @param {Object}      [context = null]
  *
  * @return {Function}
  */
-const memorizedArrow = (fn) => {
+const memorizedArrow = (fn, context = null) => {
     const cached = {};
 
     /**
@@ -215,14 +228,15 @@ const memorizedArrow = (fn) => {
      *      cached data is returned, otherwise result.
      *
      * @param {Number}  arg
+     * @param {Object}  [contextInner = null]
      * @param {Boolean} [show = false]
      */
-    return (arg, show = false) => {
+    return (arg, contextInner = null, show = false) => {
         if (true === show) {
             return cached;
         }
 
-        return cached[arg] || (cached[arg] = fn.call(this, arg));
+        return cached[arg] || (cached[arg] = fn.call(null !== contextInner ? contextInner : context, arg));
     };
 };
 
@@ -237,14 +251,15 @@ const memorizedArrow = (fn) => {
  *
  * @param {Array}       items
  * @param {Function}    fn
+ * @param {Object}      [context = null]
  *
  * @return {Array}
  */
-const map = function (items, fn) {
+const map = function (items, fn, context = null) {
     let results = [];
 
     for (const item of items) {
-        results.push(fn.call(this, item));
+        results.push(fn.call(context, item));
     }
 
     return results;
@@ -260,14 +275,15 @@ const map = function (items, fn) {
  *
  * @param {Array}       items
  * @param {Function}    fn
+ * @param {Object}      [context = null]
  *
  * @return {Array}
  */
-const mapArrow = (items, fn) => {
+const mapArrow = (items, fn, context = null) => {
     let results = [];
 
     for (const item of items) {
-        results.push(fn.call(this, item));
+        results.push(fn.call(context, item));
     }
 
     return results;
@@ -284,14 +300,15 @@ const mapArrow = (items, fn) => {
  *
  * @param {Array}       items
  * @param {Function}    fn
+ * @param {Object}      [context = null]
  *
  * @return {Array}
  */
-const filter = function (items, fn) {
+const filter = function (items, fn, context = null) {
     let results = [];
 
     for (const item of items) {
-        (fn.call(this, item) ? results.push(item) : undefined);
+        (fn.call(context, item) ? results.push(item) : undefined);
     }
 
     return results;
@@ -307,14 +324,15 @@ const filter = function (items, fn) {
  *
  * @param {Array}       items
  * @param {Function}    fn
+ * @param {Object}      [context = null]
  *
  * @return {Array}
  */
-const filterArrow = (items, fn) => {
+const filterArrow = (items, fn, context = null) => {
     let results = [];
 
     for (const item of items) {
-        (fn.call(this, item) ? results.push(item) : undefined);
+        (fn.call(context, item) ? results.push(item) : undefined);
     }
 
     return results;
@@ -332,14 +350,15 @@ const filterArrow = (items, fn) => {
  * @param {Array}       leftArr
  * @param {Array}       rightArr
  * @param {Function}    fn
+ * @param {Object}      [context = null]
  *
  * @return {Array}
  */
-const zip = function (leftArr, rightArr, fn) {
+const zip = function (leftArr, rightArr, fn, context = null) {
     let index, results = [];
 
     for (index = 0; index < Math.min(leftArr.length, rightArr.length); ++index) {
-        results.push(fn.call(this, leftArr[index], rightArr[index]));
+        results.push(fn.call(context, leftArr[index], rightArr[index]));
     }
 
     return results;
@@ -356,14 +375,15 @@ const zip = function (leftArr, rightArr, fn) {
  * @param {Array}       leftArr
  * @param {Array}       rightArr
  * @param {Function}    fn
+ * @param {Object}      [context = null]
  *
  * @return {Array}
  */
-const zipArrow = (leftArr, rightArr, fn) => {
+const zipArrow = (leftArr, rightArr, fn, context = null) => {
     let index, results = [];
 
     for (index = 0; index < Math.min(leftArr.length, rightArr.length); ++index) {
-        results.push(fn.call(this, leftArr[index], rightArr[index]));
+        results.push(fn.call(context, leftArr[index], rightArr[index]));
     }
 
     return results;
