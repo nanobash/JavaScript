@@ -388,3 +388,40 @@ const zipArrow = (leftArr, rightArr, fn, context = null) => {
 
     return results;
 };
+
+/**
+ * Higher-Order function, loops through array and executes user defined
+ *      function for each element with specified context.
+ *
+ * @example
+ *      forEach([2, 3, 5], (item) => {
+ *          console.log(item ** 2);
+ *      });
+ *
+ * @param {Array}     array
+ * @param {Function}  fn
+ * @param {Object}    [context = null]
+ */
+const forEach = function (array, fn, context = null) {
+    for (let i = 0; i < array.length; ++i) {
+        fn.call(context, array[i]);
+    }
+};
+
+/**
+ * Arrow style function, prototyping above defined "forEach" function.
+ *
+ * @example
+ *      forEachArrow([2, 3, 5], (item) => {
+ *          console.log(item ** 2);
+ *      });
+ *
+ * @param {Array}     array
+ * @param {Function}  fn
+ * @param {Object}    [context = null]
+ */
+const forEachArrow = (array, fn, context = null) => {
+    for (let i = 0; i < array.length; ++i) {
+        fn.call(context, array[i]);
+    }
+};
