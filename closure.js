@@ -3,7 +3,7 @@
  */
 
 /**
- * Function takes provided function with with n argument and convert
+ * Function takes provided function with n argument and converts
  *      it into a single argument.
  *
  * @example
@@ -172,8 +172,8 @@ const anyArrow = (items, fn, context = null) => {
 };
 
 /**
- * Function memorizes calculated results in object and upon second time
- *      execution retrieves them from cache.
+ * Function memorize calculated results in the object and upon second time
+ *      execution retrieves them from the cache.
  *
  * @example
  *      let memory = memorized((arg) => {
