@@ -425,3 +425,50 @@ const forEachArrow = (array, fn, context = null) => {
         fn.call(context, array[i]);
     }
 };
+
+/**
+ * Higher-Order reducing function, returns accumulated result after traversing throughout
+ *      each array values using user defined manual function.
+ *
+ * @example
+ *      console.log(reduce([2, 4, 6], function (acc, val) {
+ *          return acc + val;
+ *      }, null));
+ *
+ * @param {Array}       array
+ * @param {Function}    fn
+ * @param {Object}      [context = null]
+ *
+ * @returns {Number}
+ */
+const reduce = function (array, fn, context = null) {
+    let accumulator = 0;
+
+    for (let value of array) {
+        accumulator = fn.call(context, accumulator, value);
+    }
+
+    return accumulator;
+};
+
+/**
+ * Arrow style function, prototyping above defined "reduce" function.
+ *
+ * @example
+ *      console.log(reduce([2, 4, 6], (acc, val) => acc + val, null));
+ *
+ * @param {Array}       array
+ * @param {Function}    fn
+ * @param {Object}      [context = null]
+ *
+ * @returns {Number}
+ */
+const reduceArrow = (array, fn, context = null) => {
+    let accumulator = 0;
+
+    for (let value of array) {
+        accumulator = fn.call(context, accumulator, value);
+    }
+
+    return accumulator;
+};
