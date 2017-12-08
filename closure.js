@@ -472,3 +472,59 @@ const reduceArrow = (array, fn, context = null) => {
 
     return accumulator;
 };
+
+/**
+ * Simple addition function.
+ *
+ * @example
+ *      console.log(addition(10, 20));
+ *
+ * @param {Number} x
+ * @param {Number} y
+ *
+ * @returns {Number}
+ */
+const addition = (x, y) => x + y;
+
+/**
+ * Currying is a process of converting a function with n number of
+ *      arguments into a nested unary function.
+ *
+ * @example
+ *      console.log(curry(addition)(2)(4));
+ *
+ * @param {Function}    fn
+ * @param {Object}      [context = null]
+ *
+ * @returns {Function}
+ */
+const curry = function (fn, context = null) {
+    if ('function' !== typeof fn) {
+        throw Error('Invalid Function Provided!');
+    }
+
+    return function (x) {
+        return function (y) {
+            return fn.call(context, x, y);
+        };
+    };
+};
+
+/**
+ * Arrow style function, prototyping above defined "curry" function.
+ *
+ * @example
+ *      console.log(curryArrow(addition)(2)(4));
+ *
+ * @param {Function} fn
+ * @param {Object} [context = null]
+ *
+ * @returns {function(*=): function(*=): *}
+ */
+const curryArrow = (fn, context = null) => {
+    if ('function' !== typeof fn) {
+        throw Error('Invalid Function Provided!');
+    }
+
+    return x => y => fn.call(context, x, y);
+};
