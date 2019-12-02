@@ -343,20 +343,6 @@ console.time("JavaScript Execution Time");
 console.timeEnd("JavaScript Execution Time");
 console.log("\n");
 
-const stuff = seconds => {
-    return new Promise(resolve => setTimeout(resolve, seconds * 1000));
-};
-
-const callAsync = async function () {
-    console.log("Zero seconds");
-
-    await stuff(2).then(() => console.log("First Finished"));
-    console.log("Two seconds");
-
-    await stuff(5).then(() => console.log("Second Finished"));
-    console.log("Six seconds");
-};
-
 (() => {
     class Human
     {
@@ -443,4 +429,28 @@ const callAsync = async function () {
     // Function call via call & apply methods
     speak.call(dog, dog.says);
     speak.apply(cat, [cat.says]);
+})();
+
+(function () {
+    const fact = (num) => {
+        if (num === 0) {
+            return 1;
+        }
+
+        return num * fact(num - 1);
+    };
+
+    // Normal flow
+    console.log("Started testing in normal synchronous flow");
+    console.log(fact(21));
+    console.log("Finished testing in normal synchronous flow");
+
+    async function getFact(num) {
+        return await fact(num);
+    }
+
+    // Async flow
+    console.log("Started testing in normal asynchronous flow");
+    getFact(21).then(res => console.log(res));
+    console.log("Finished testing in normal asynchronous flow");
 })();
