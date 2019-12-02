@@ -1,3 +1,5 @@
+"use strict";
+
 console.time("JavaScript Execution Time");
 
 // Immediately Invoked JavaScript Function Expression

@@ -1,6 +1,4 @@
-/*
- * JavaScript (Ecmascript 6) set of functions.
- */
+"use strict";
 
 /**
  * Function takes provided function with n argument and converts
