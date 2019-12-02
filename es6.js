@@ -360,26 +360,87 @@ const callAsync = async function () {
 (() => {
     class Human
     {
-        constructor(name, surname, age) {
-            this.name = name;
-            this.surname = surname;
-            this.age = age;
-            this._names = [];
+        constructor(name) {
+            this._name = name;
         }
 
-        set nickName(nick) {
-            this._names.push(nick);
+        set name(name) {
+            this._name = name;
         }
 
-        get nickName() {
-            return this._names.join(", ");
+        get name() {
+            return this._name;
         }
     }
 
-    const o = new Human("John", "Doe", 30);
+    const obj = new Human("John");
 
-    o.nickName = "Jannie";
-    o.nickName = "Smith";
+    console.log(obj.name);
 
-    console.log(o.nickName);
+    obj.nickName = "Jannie";
+
+    console.log(obj.nickName);
+})();
+
+// Immediately invoked function that stores everything defined within inside scope
+(function () {
+    /*
+     *  There are four ways of calling functions in JavaScript:
+     *      Traditional function call (ordinary, very basic & normal one)
+     *      Method call (as a method of an object)
+     *      Constructor call (as initialization of a new object)
+     *      Via call & apply super methods
+     */
+
+    function test() {
+        console.log("Function is called as a TRADITIONAL function");
+    }
+
+    // Traditional call
+    test();
+
+    const obj = {
+        status: "Awesome",
+        getInfo() {
+            console.log("Function is called as a METHOD since it is a method of an object");
+            console.log(`This is really ${this.status}`);
+        }
+    };
+
+    // Method call
+    obj.getInfo();
+
+    function Human(name, surname, age) {
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
+    }
+
+    Human.prototype.getInfo = function () {
+        console.log("This is a CONSTRUCTOR call");
+        console.log(`${this.name} ${this.surname} is ${this.age} old`);
+    };
+
+    // Constructor call
+    const human = new Human("John", "Doe", 30);
+    human.getInfo();
+
+    const speak = function (what) {
+        console.log("This is a function call via call/apply super methods");
+        console.log(`${this.petName} says ${what}`);
+    };
+
+    const dog = {
+        petName: "Dog",
+        says: "Woof"
+    };
+
+    const cat = {
+        petName: "Cat",
+        says: "Meow"
+    };
+
+    // Function call via call & apply methods
+    speak.call(dog, dog.says);
+    speak.apply(cat, [cat.says]);
 })();
