@@ -62,7 +62,32 @@
     console.log();
 })();
 
-(function () {
+/**
+ * Creates modularity examples code (not to repeat code) with help of Immediately Invoked Function Expression (IIFE)
+ *
+ * @type {function(*, *, *): *}
+ */
+const examplesExecutionModule = (function (Figure, Square, Triangle) {
+    const fig = new Figure();
+    const square = new Square(5);
+    const triangle = new Triangle(8, 4);
+
+    return (
+        console.log(`Definition of a ${fig.type}: ${fig.getFigureDefinition()}`),
+        console.log("---------------------------------------------------------------------------"),
+        console.log(),
+
+        console.log(`Area of the ${square.type} with the side length of ${square.side} is ${square.area()}`),
+        console.log("---------------------------------------------------------------------------"),
+        console.log(),
+
+        console.log(`Area of the ${triangle.type} with the side length of ${triangle.side} and height of ${triangle.height} is ${triangle.area()}`),
+        console.log("---------------------------------------------------------------------------"),
+        console.log()
+    );
+});
+
+(function (examples) {
     /**
      * Creates Figure constructor, that has type prototype property
      *
@@ -99,18 +124,49 @@
         return this.height * this.side / 2;
     };
 
-    const fig = new Figure();
-    console.log(`Definition of a ${fig.type}: ${fig.getFigureDefinition()}`);
-    console.log("---------------------------------------------------------------------------");
-    console.log();
+    examples(Figure, Square, Triangle);
+})(examplesExecutionModule);
 
-    const square = new Square(5);
-    console.log(`Area of the ${square.type} with the side length of ${square.side} is ${square.area()}`);
-    console.log("---------------------------------------------------------------------------");
-    console.log();
+(function (example) {
+    class Figure
+    {
+        constructor(type = "Figure") {
+            this.type = type;
+        }
 
-    const triangle = new Triangle(8, 4);
-    console.log(`Area of the ${triangle.type} with the side length of ${triangle.side} and height of ${triangle.height} is ${triangle.area()}`);
-    console.log("---------------------------------------------------------------------------");
-    console.log();
-})();
+        getFigureDefinition() {
+            return "Formally, a geometric figure is any set of points on a plane or in space."
+        }
+
+        area() {
+            return "Area is the quantity that expresses the extent of a two-dimensional figure or shape or planar lamina, in the plane.";
+        }
+    }
+
+    class Square extends Figure
+    {
+        constructor(side, type = "Square") {
+            super(type);
+            this.side = side;
+        }
+
+        area() {
+            return this.side * 4;
+        }
+    }
+
+    class Triangle extends Figure
+    {
+        constructor(side, height, type = "Triangle") {
+            super(type);
+            this.side = side;
+            this.height = height;
+        }
+
+        area() {
+            return this.height * this.side / 2;
+        }
+    }
+
+    example(Figure, Square, Triangle);
+})(examplesExecutionModule);
